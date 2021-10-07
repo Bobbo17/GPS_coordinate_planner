@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:gravity="center_horizontal"
+    >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="488dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvLocationList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Press Record Room Location to add a room and gps coordinate to the list"></TextView>
+        </LinearLayout>
+    </ScrollView>
+
+    <EditText
+        android:id="@+id/tbRoomNum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Room Number" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnAddRecord"
+            android:layout_width="126dp"
+            android:layout_height="88dp"
+            android:layout_marginRight="22dp"
+            android:onClick="onAddRecordClick"
+            android:text="Record Room"></Button>
+
+        <Button
+            android:id="@+id/btnExportList"
+            android:layout_width="126dp"
+            android:layout_height="88dp"
+            android:text="Export List"></Button>
+    </LinearLayout>
+
+
+
+</LinearLayout>
