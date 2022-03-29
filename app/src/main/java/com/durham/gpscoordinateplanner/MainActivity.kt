@@ -3,6 +3,7 @@ package com.durham.gpscoordinateplanner
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
@@ -43,6 +44,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var flpc: FusedLocationProviderClient
     lateinit var locationManager:LocationManager
 
+    var btnPressed:Boolean = false
+
     val requestPermissionLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
@@ -59,6 +62,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main)
 
         requestPermissions()
@@ -133,7 +137,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //GPS Function
-    fun getLocation() {
+    fun getLocation(name:String) {
 
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         hasGPS = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
@@ -150,10 +154,12 @@ class MainActivity : AppCompatActivity() {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,750,2F,object :
                 LocationListener {
                 override fun onLocationChanged(location: Location) {
-                    if (location!=null) {
+                    if (location!=null && btnPressed) {
                         locationGps = location
                         locationList.add(location)
-                        coordinateList.add(Coordinate(ebEntranceInfo.text.toString(), location))
+                        coordinateList.add(Coordinate(name, location))
+                        btnPressed = false
+                        Toast.makeText(applicationContext, "Location added", Toast.LENGTH_LONG).show()
                         updateText()
                     }
                 }
@@ -259,7 +265,7 @@ class MainActivity : AppCompatActivity() {
     fun onEditTextClick(v:View){
         if (ebEntranceInfo.text.toString() == "Location Info"){
             ebEntranceInfo.setText("")
-            Snackbar.make(v, "blanking text... not!", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(v, "erasing text... not!", Snackbar.LENGTH_LONG).show()
         }
     }
     // Request code for creating a PDF document.
@@ -280,7 +286,11 @@ class MainActivity : AppCompatActivity() {
 
     fun onAddRecordClick(v:View){
         if(ebEntranceInfo.text.toString() != "" && ebEntranceInfo.text.toString() != "Location Info"){
-            getLocation()
+            if (!btnPressed){
+                getLocation(ebEntranceInfo.text.toString())
+                btnPressed = true
+                ebEntranceInfo.setText("")
+            }
         }else{
             Snackbar.make(v, "must have building info in the text input box", Snackbar.LENGTH_LONG).show()
         }
